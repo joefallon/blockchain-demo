@@ -1,0 +1,66 @@
+/* _typography.scss */
+@import "./variables";
+
+body {
+    font-family: $font-stack;
+    color: $font-color-default;
+    background-color: $gray-light;
+}
+
+h1 {
+    font-family: $font-stack;
+    font-weight: 300;
+    font-size: 36px;
+    line-height: 110%;
+    margin: 8px 0 8px 0;
+}
+
+h2 {
+    font-family: $font-stack;
+    font-weight: 400;
+    font-size: 54px;
+    line-height: 110%;
+    margin: 25px 0 25px 0;
+}
+
+h3 {
+    font-family: $font-stack;
+    font-weight: 400;
+    font-size: 22px;
+    line-height: 110%;
+    margin: 20px 0 20px 0;
+}
+
+h4 {
+    font-family: $font-stack;
+    font-weight: 400;
+    font-size: 34px;
+    line-height: 110%;
+    margin: 15px 0 15px 0;
+}
+
+h5 {
+    font-family: $font-stack;
+    font-weight: 400;
+    font-size: 25px;
+    line-height: 110%;
+    margin: 10px 0 10px 0;
+}
+
+h6 {
+    font-family: $font-stack;
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 110%;
+    margin: 6px 0 6px 0;
+}
+
+p {
+    font-family: $font-stack;
+    font-weight: normal;
+    font-size: 15px;
+    line-height: 23px;
+    padding: 0;
+    margin: 15px 0 15px 0;
+    color: $font-color-default;
+}

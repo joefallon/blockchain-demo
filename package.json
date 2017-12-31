@@ -4,7 +4,16 @@
   "description": "A demo of the blockchain written using React and TypeScript.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build:dev": "npm run clean && npm run webpack -- --config webpack.dev.js",
+    "build:karma": "npm run clean && npm run webpack -- --config webpack.karma.js --watch",
+    "build:prod": "npm run clean && npm run webpack -- --config webpack.prod.js",
+    "clean": "rm -rf public",
+    "karma:run": "karma run",
+    "mocha": "./node_modules/mocha/bin/mocha",
+    "start:dev:client": "./node_modules/.bin/webpack-dev-server --config webpack.dev.js --progress",
+    "test:client": "",
+    "test:client:debug": "",
+    "webpack": "./node_modules/webpack/bin/webpack.js"
   },
   "repository": {
     "type": "git",
