@@ -26,11 +26,6 @@ module.exports = {
                 loader: ExtractTextPlugin.extract({ fallback: 'style-loader', use: 'css-loader' })
             },
             {
-                test: /\.(jpe?g|png|gif|svg)$/,
-                loader: 'file-loader',
-                options: { name: '[path][name].[chunkhash:8].[ext]' }
-            },
-            {
                 test: /\.(ttf|eot|woff|woff2)$/,
                 loader: 'file-loader',
                 options: { name: 'fonts/[name].[ext]' }

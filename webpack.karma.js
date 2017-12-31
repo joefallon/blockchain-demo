@@ -13,10 +13,9 @@ module.exports = {
     devtool: 'inline-source-map',
 
     watchOptions: {
-        aggregateTimeout: 0,
+        aggregateTimeout: 500,
         poll: false,
-        ignored: [ /node_modules/,  "src/**/*.tsx", "src/**/*.ts", "src/**/*.test.*",
-                   "src/**/*Test*", "src/**/*.scss" ]
+        ignored: [ /node_modules/,  "src/**/*.tsx", "src/**/*.ts", "src/**/*.scss" ]
     },
 
     module: {
@@ -26,6 +25,16 @@ module.exports = {
             {
                 test: /\.css$/,
                 loader: ExtractTextPlugin.extract({ fallback: 'style-loader', use: 'css-loader' })
+            },
+            {
+                test: /\.(jpe?g|png|gif|svg)$/,
+                loader: 'file-loader',
+                options: { name: '[path][name].[chunkhash:8].[ext]' }
+            },
+            {
+                test: /\.(ttf|eot|woff|woff2)$/,
+                loader: 'file-loader',
+                options: { name: 'fonts/[name].[ext]' }
             }
         ]
     },
