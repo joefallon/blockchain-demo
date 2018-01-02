@@ -1,0 +1,26 @@
+/* _cards.scss */
+@import './variables';
+
+.card {
+    background-color: $white;
+    padding: 16px;
+    box-shadow: $shadow1;
+}
+
+.card-header {
+    margin-bottom: 16px;
+
+    h3 {
+        text-align: center;
+        margin: 0;
+        padding: 0;
+    }
+}
+
+.card-main {
+
+}
+
+.card-actions {
+
+}

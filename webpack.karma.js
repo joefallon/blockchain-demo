@@ -13,7 +13,7 @@ module.exports = {
     devtool: 'inline-source-map',
 
     watchOptions: {
-        aggregateTimeout: 500,
+        aggregateTimeout: 0,
         poll: false,
         ignored: [ /node_modules/,  "src/**/*.tsx", "src/**/*.ts", "src/**/*.scss" ]
     },

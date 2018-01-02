@@ -1,0 +1,10 @@
+/* Block.scss */
+.block-route .status-label {
+  display: inline-block;
+  margin: 0 24px 0 0;
+  padding: 0;
+}
+
+.block-route .data-input {
+  height: 200px;
+}
