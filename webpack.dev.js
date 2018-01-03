@@ -2,9 +2,6 @@
 const common  = require('./webpack.base.js');
 const merge   = require('webpack-merge');
 const path    = require('path');
-const webpack = require('webpack');
-
-const __API__ = JSON.stringify('http://blockchain-demo.lemp16.joefallon.net:10080/');
 
 module.exports = merge(common, {
     output: {
@@ -35,6 +32,5 @@ module.exports = merge(common, {
     },
 
     plugins: [
-        new webpack.DefinePlugin({__API__: __API__})
     ]
 });

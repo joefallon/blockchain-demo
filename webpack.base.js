@@ -19,7 +19,17 @@ module.exports = {
     },
     module: {
         rules: [
+            {
+                test: /\.worker\.js$/,
+                use: {
+                    loader: 'worker-loader',
+                    options: { inline: true, fallback: true }
+                }
+            },
             { test: /\.tsx?$/, loader: 'awesome-typescript-loader' },
+            { test: /\.ts?$/, loader: 'awesome-typescript-loader' },
+            { enforce: 'pre', test: /\.tsx$/, loader: 'source-map-loader' },
+            { enforce: 'pre', test: /\.ts$/, loader: 'source-map-loader' },
             { enforce: 'pre', test: /\.js$/, loader: 'source-map-loader' },
             {
                 test: /\.css$/,
@@ -31,9 +41,6 @@ module.exports = {
                 options: { name: 'fonts/[name].[ext]' }
             }
         ]
-    },
-    node: {
-        "child_process": "empty"
     },
     plugins: [
         new ExtractTextPlugin('styles/styles.[hash:8].css'),
