@@ -9,23 +9,6 @@ import { BlockModel } from '../../models/BlockModel';
 import { Header } from '../../components/header/Header';
 import { MiningLoader } from '../../components/mining_loader/MiningLoader';
 
-// import Worker = require('worker-loader!../../domain/Fibonacci.worker');
-// import * as workerPath from "file-loader?name=[name].js!./Fibonacci.worker";
-// console.log(workerPath);
-// const worker = new Worker(workerPath);
-
-
-// import workerFarm = require('worker-farm');
-// const workers = workerFarm(require.resolve('../../domain/Fibonacci'));
-// const workerpool = require('workerpool');
-// const pool = workerpool.pool();
-
-import Parallel = require('paralleljs');
-
-
-import fibonacci = require('../../domain/Fibonacci');
-
-
 export interface BlockProps extends RouteComponentProps<any> {
     model?: BlockModel
 }
@@ -124,65 +107,15 @@ export class Block extends React.Component<BlockProps, BlockState> {
         const hash = await this.props.model.getHashValue();
         const hashIsValid = await this.props.model.hashIsValid();
         const status = hashIsValid ? Block.STATUS_VALID : Block.STATUS_INVALID;
-
         this.setState({data: data, hashValue: hash, blockStatus: status});
     };
 
     private handleMineClick = async () => {
         this.setState({isMining: true});
-        // const nonce = await this.props.model.findNonce();
-        // const hash = await this.props.model.getHashValue();
-        // const hashIsValid = await this.props.model.hashIsValid();
-        // const status = hashIsValid ? Block.STATUS_VALID : Block.STATUS_INVALID;
-        //
-        // this.setState({nonce: nonce, hashValue: hash, blockStatus: status, isMining: false});
-
-
-        // worker.addEventListener('message', (ev: MessageEvent) => {
-        //     if(ev.data == 'ready'){
-        //         worker.postMessage(5);
-        //     }
-        //     else {
-        //         this.setState({
-        //             isMining: false, nonce: 0, hashValue: ev.data, blockStatus: Block.STATUS_VALID
-        //         });
-        //     }
-        // });
-
-        // workers(5, (result: any) => {
-        //     this.setState({
-        //         isMining: false, nonce: 0, hashValue: result, blockStatus: Block.STATUS_VALID
-        //     });
-        // });
-
-        // const _self = this;
-        //
-        // pool.exec(fibonacci, [10])
-        //     .then(function (result) {
-        //         _self.setState({
-        //             isMining: false, nonce: 0, hashValue: result, blockStatus: Block.STATUS_VALID
-        //         });
-        //     })
-        //     .catch(function (err) {
-        //         console.error(err);
-        //     })
-        //     .then(function () {
-        //         pool.terminate(); // terminate all workers when done
-        //     });
-        const _self = this;
-
-        const p = new Parallel([10]);
-        p.spawn(async (data: number[]) => {
-            // return [111];
-
-            const n = data[0];
-            const result = await fibonacci(n);
-            return [result];
-        }).then((data: number[]) => {
-            const result = data[0].toString();
-            _self.setState({
-                isMining: false, nonce: 0, hashValue: result, blockStatus: Block.STATUS_VALID
-            });
-        });
+        const nonce = await this.props.model.findNonce();
+        const hash = await this.props.model.getHashValue();
+        const hashIsValid = await this.props.model.hashIsValid();
+        const status = hashIsValid ? Block.STATUS_VALID : Block.STATUS_INVALID;
+        this.setState({nonce: nonce, hashValue: hash, blockStatus: status, isMining: false});
     };
 }

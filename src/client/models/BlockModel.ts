@@ -1,10 +1,6 @@
 import js_sha256 = require('js-sha256');
 const sha256 = js_sha256.sha256;
 
-import Parallel = require('paralleljs');
-
-// const worker = new Worker('../')
-
 
 export class BlockModel {
     private _sequenceId: number;
@@ -43,38 +39,6 @@ export class BlockModel {
 
     public findNonce(): Promise<number> {
         return new Promise(async (resolve, reject) => {
-            // const d = [];
-            // d.push(this._sequenceId);
-            // d.push(this._data);
-            //
-            // let p = new Parallel(d);
-            //
-            // p.spawn((data: any[]) => {
-            //     const result = [];
-            //     let found = false;
-            //     let nonce = 0;
-            //
-            //     while(!found) {
-            //         const hash = sha256(data[0] + nonce + data[1]);
-            //         const substr = hash.substring(0, 4);
-            //
-            //         if(substr == '0000') {
-            //             found = true;
-            //         }
-            //         else {
-            //             nonce++;
-            //         }
-            //     }
-            //
-            //     return [nonce];
-            // }).then((data: any) => {
-            //     this._nonce = data[0];
-            //
-            //     setImmediate(() => {
-            //         resolve(this._nonce);
-            //     });
-            // });
-
             let found = false;
             this._nonce = 0;
 
