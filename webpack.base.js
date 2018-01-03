@@ -32,6 +32,9 @@ module.exports = {
             }
         ]
     },
+    node: {
+        "child_process": "empty"
+    },
     plugins: [
         new ExtractTextPlugin('styles/styles.[hash:8].css'),
         new CopyWebpackPlugin([ {from:'static/img',to:'img'} ]),

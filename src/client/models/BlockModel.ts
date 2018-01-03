@@ -5,6 +5,7 @@ import Parallel = require('paralleljs');
 
 // const worker = new Worker('../')
 
+
 export class BlockModel {
     private _sequenceId: number;
     private _nonce: number;

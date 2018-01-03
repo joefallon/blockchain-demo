@@ -68,6 +68,9 @@
     "react-dom": "^16.2.0",
     "react-router-dom": "^4.2.2",
     "threads": "^0.10.0",
-    "tslib": "^1.8.1"
+    "tslib": "^1.8.1",
+    "worker-farm": "^1.5.2",
+    "worker-loader": "^1.1.0",
+    "workerpool": "^2.3.0"
   }
 }

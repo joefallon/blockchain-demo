@@ -12,6 +12,10 @@
     "strictFunctionTypes": true,
     "target": "es5"
   },
+  "include": [
+    "typings/**/*",
+    "src/**/*"
+  ],
   "exclude": [
     "node_modules"
   ]
