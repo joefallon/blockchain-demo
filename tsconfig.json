@@ -11,13 +11,8 @@
     "skipLibCheck": true,
     "strictFunctionTypes": true,
     "target": "es5",
-    "lib": [ "webworker", "es2015.promise", "scripthost", "dom", "es5" ],
-    "types": [ "./typings/custom.d.ts" ]
+    "lib": [ "es6", "dom", "webworker", "scripthost" ]
   },
-  "include": [
-    "typings/**/*",
-    "src/**/*"
-  ],
   "exclude": [
     "node_modules"
   ]

@@ -20,17 +20,17 @@ module.exports = {
 
     module: {
         rules: [
-            {
-                test: /\.worker\.js$/,
-                use: {
-                    loader: 'worker-loader',
-                    options: { inline: true, fallback: true }
-                }
-            },
-            { test: /\.ts?$/, loader: 'awesome-typescript-loader' },
+            // {
+            //     test: /\.worker\.js$/,
+            //     use: {
+            //         loader: 'worker-loader',
+            //         options: { inline: true, fallback: true }
+            //     }
+            // },
+            // { test: /\.ts?$/, loader: 'awesome-typescript-loader' },
             { test: /\.tsx?$/, loader: 'awesome-typescript-loader' },
             { enforce: 'pre', test: /\.tsx$/, loader: 'source-map-loader' },
-            { enforce: 'pre', test: /\.ts$/, loader: 'source-map-loader' },
+            // { enforce: 'pre', test: /\.ts$/, loader: 'source-map-loader' },
             { enforce: 'pre', test: /\.js$/, loader: 'source-map-loader' },
             {
                 test: /\.css$/,
@@ -45,10 +45,6 @@ module.exports = {
                 test: /\.(ttf|eot|woff|woff2)$/,
                 loader: 'file-loader',
                 options: { name: 'fonts/[name].[ext]' }
-            },
-            {
-                test: /\.worker\.js$/,
-                use: { loader: 'worker-loader' }
             }
         ]
     },
