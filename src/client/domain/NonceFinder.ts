@@ -6,22 +6,34 @@ export class NonceFinder {
     private _sequenceId: number;
     private _data: string;
     private _prevHash: string;
+    private _shouldStop: boolean;
 
     public constructor(difficulty: number, sequenceId=0, data='', prevHash='') {
         this._difficulty = difficulty;
         this._sequenceId = sequenceId;
         this._data       = data;
         this._prevHash   = prevHash;
+        this._shouldStop = false;
     }
 
-    public findNonce(): number {
-        let nonce = 0;
+    public stop() {
+        this._shouldStop = true;
+    }
 
-        while(!this.isHashMatch(nonce)) {
-            ++nonce;
-        }
+    public findNonce(startingNonce=0): Promise<number> {
+        return new Promise(async (resolve, reject) => {
+            setTimeout(() => {
+                console.log('finding with offset ' + startingNonce + '...');
+                this._shouldStop = false;
+                let nonce = startingNonce;
 
-        return nonce;
+                while(!this.isHashMatch(nonce) && !this._shouldStop) {
+                    ++nonce;
+                }
+
+                resolve(nonce);
+            }, 0);
+        });
     }
 
     public hash(nonce: number): string {
@@ -38,7 +50,7 @@ export class NonceFinder {
         return hash;
     }
 
-    private isHashMatch(nonce: number): boolean {
+    public isHashMatch(nonce: number): boolean {
         const hash   = this.hash(nonce);
         const diff   = this._difficulty;
         const substr = hash.substring(0, diff);

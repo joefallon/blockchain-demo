@@ -32,6 +32,6 @@
   text-decoration: none;
 }
 
-.header .header-link:active, .header .header-link:focus, .header .header-link:hover {
+.header .header-link:active, .header .header-link:hover {
   background-color: #23527c;
 }

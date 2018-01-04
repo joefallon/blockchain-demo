@@ -12,7 +12,10 @@
     "strictFunctionTypes": true,
     "target": "es5",
     "lib": [ "es6", "dom", "webworker", "scripthost" ]
+
   },
+  "include": [
+    "./typings/custom.d.ts", "./src/**/*.tsx", "./src/**/*.ts"],
   "exclude": [
     "node_modules"
   ]

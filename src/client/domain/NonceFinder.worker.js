@@ -1,5 +1,0 @@
-"use strict";
-var worker = self;
-worker.onmessage = function (ev) {
-};
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiTm9uY2VGaW5kZXIud29ya2VyLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiTm9uY2VGaW5kZXIud29ya2VyLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7QUFBQSxJQUFNLE1BQU0sR0FBVyxJQUFXLENBQUM7QUFFbkMsTUFBTSxDQUFDLFNBQVMsR0FBRyxVQUFDLEVBQWdCO0FBT3BDLENBQUMsQ0FBQyJ9

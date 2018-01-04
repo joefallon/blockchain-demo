@@ -26,11 +26,14 @@ module.exports = {
                     options: { inline: true, fallback: true }
                 }
             },
-            { test: /\.tsx?$/, loader: 'awesome-typescript-loader' },
-            // { test: /\.ts?$/, loader: 'awesome-typescript-loader' },
-            { enforce: 'pre', test: /\.tsx$/, loader: 'source-map-loader' },
-            // { enforce: 'pre', test: /\.ts$/, loader: 'source-map-loader' },
-            { enforce: 'pre', test: /\.js$/, loader: 'source-map-loader' },
+            { enforce: 'pre', test: /\.js$/, use: 'source-map-loader' },
+            { enforce: 'pre', test: /\.ts?$/, use: "source-map-loader" },
+            { test: /\.ts?$/,
+                use: [
+                    { loader: 'awesome-typescript-loader', options: { configFileName: 'tsconfig.json' } }
+                ],
+                exclude: /(?:node_modules)/
+            },
             {
                 test: /\.css$/,
                 loader: ExtractTextPlugin.extract({ fallback: 'style-loader', use: 'css-loader' })

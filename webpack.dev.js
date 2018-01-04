@@ -6,7 +6,7 @@ const path    = require('path');
 module.exports = merge(common, {
     output: {
         path: path.resolve(__dirname, 'public'),
-        filename: "js/[name].js"
+        filename: "js/[name].[chunkhash:8].js"
     },
 
     devtool: 'inline-source-map',
