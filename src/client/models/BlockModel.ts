@@ -1,24 +1,23 @@
 import js_sha256 = require('js-sha256');
 const sha256 = js_sha256.sha256;
 
-import NonceFinderWorker1 = require('worker-loader!../domain/NonceFinder1.worker.ts');
-import NonceFinderWorker2 = require('worker-loader!../domain/NonceFinder2.worker.ts');
-import NonceFinderWorker3 = require('worker-loader!../domain/NonceFinder3.worker.ts');
-import NonceFinderWorker4 = require('worker-loader!../domain/NonceFinder4.worker.ts');
+import NonceFinderWorker = require('worker-loader!../domain/NonceFinder.worker.ts');
 
 import { NonceFinder } from '../domain/NonceFinder';
 
 export class BlockModel {
-    private static readonly DIFFICULTY = 4;
+    private static readonly DIFFICULTY = 3;
 
     private _sequenceId: number;
     private _nonce: number;
     private _data: string;
+    private _worker: Worker;
 
     public constructor() {
         this._nonce      = 0;
         this._sequenceId = 1;
         this._data       = '';
+        this._worker     = new NonceFinderWorker();
     }
 
     public getNonce(): number {
@@ -50,59 +49,16 @@ export class BlockModel {
 
     public findNonce(): Promise<number> {
         return new Promise(async (resolve, reject) => {
-            let found = false;
-            const worker1 = new NonceFinderWorker1();
-            const worker2 = new NonceFinderWorker2();
-            const worker3 = new NonceFinderWorker3();
-            const worker4 = new NonceFinderWorker4();
+            const worker = this._worker;
 
-            worker1.onmessage = (message: MessageEvent) => {
+            worker.onmessage = (message: MessageEvent) => {
                 console.log('message received from worker1...');
                 console.log(message);
                 this._nonce = JSON.parse(message.data);
-
-                if(!found) {
-                    found = true;
-                    resolve(this._nonce);
-                }
+                resolve(this._nonce);
             };
 
-            worker2.onmessage = (message: MessageEvent) => {
-                console.log('message received from worker2...');
-                console.log(message);
-                this._nonce = JSON.parse(message.data);
-
-                if(!found) {
-                    found = true;
-                    resolve(this._nonce);
-                }
-            };
-
-            worker3.onmessage = (message: MessageEvent) => {
-                console.log('message received from worker3...');
-                console.log(message);
-                this._nonce = JSON.parse(message.data);
-
-                if(!found) {
-                    found = true;
-                    resolve(this._nonce);
-                }
-            };
-
-            worker4.onmessage = (message: MessageEvent) => {
-                console.log('message received from worker4...');
-                console.log(message);
-                this._nonce = JSON.parse(message.data);
-
-                if(!found) {
-                    found = true;
-                    resolve(this._nonce);
-                }
-            };
-
-            const nonceOffSet = Math.floor(Number.MAX_SAFE_INTEGER / 4 - 1);
-
-            const msg1 = {
+            const msg = {
                 sequenceId: this._sequenceId,
                 data:       this._data,
                 difficulty: BlockModel.DIFFICULTY,
@@ -110,47 +66,9 @@ export class BlockModel {
                 workerId:   1
             };
 
-            const msg2 = {
-                sequenceId: this._sequenceId,
-                data:       this._data,
-                difficulty: BlockModel.DIFFICULTY,
-                offset:     nonceOffSet,
-                workerId:   2
-            };
-
-            const msg3 = {
-                sequenceId: this._sequenceId,
-                data:       this._data,
-                difficulty: BlockModel.DIFFICULTY,
-                offset:     nonceOffSet * 2,
-                workerId:   3
-            };
-
-            const msg4 = {
-                sequenceId: this._sequenceId,
-                data:       this._data,
-                difficulty: BlockModel.DIFFICULTY,
-                offset:     nonceOffSet * 3,
-                workerId:   4
-            };
-
-
-
             console.log('sending msg to worker1...');
-            console.log(msg1);
-            worker1.postMessage(JSON.stringify(msg1));
-
-            // console.log('sending msg to worker2...');
-            // console.log(msg2);
-            // worker2.postMessage(JSON.stringify(msg2));
-            //
-            // console.log('sending msg to worker3...');
-            // console.log(msg3);
-            // worker3.postMessage(JSON.stringify(msg3));
-            //
-            // console.log('sending msg to worker4...');
-            // console.log(msg4);
-            // worker4.postMessage(JSON.stringify(msg4));
+            console.log(msg);
+            worker.postMessage(JSON.stringify(msg));
         });
     }
 

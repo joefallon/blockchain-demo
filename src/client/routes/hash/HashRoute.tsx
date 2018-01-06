@@ -1,23 +1,22 @@
-import { SyntheticEvent } from 'react';
-
-require('./Hash.css');
+require('./HashRoute.css');
 
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
+import { SyntheticEvent } from 'react';
 
 import { HashModel } from '../../models/HashModel';
 import { Header } from '../../components/header/Header';
 
-export interface HashProps extends RouteComponentProps<any> {
+export interface HashRouteProps extends RouteComponentProps<any> {
     model?: HashModel
 }
 
-interface HashState {
+interface HashRouteState {
     data:      string
     hashValue: string
 }
 
-export class Hash extends React.Component<HashProps, HashState>  {
+export class HashRoute extends React.Component<HashRouteProps, HashRouteState>  {
     private textarea: HTMLTextAreaElement;
 
     public constructor(props) {

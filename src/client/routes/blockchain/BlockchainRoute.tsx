@@ -1,17 +1,17 @@
-require('./Blockchain.css');
+require('./BlockchainRoute.css');
 
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
 
 import { Header } from '../../components/header/Header';
 
-export interface BlockchainProps extends RouteComponentProps<any> {}
+export interface BlockchainRouteProps extends RouteComponentProps<any> {}
 
-interface BlockchainState {}
+interface BlockchainRouteState {}
 
-export class Blockchain extends React.Component<BlockchainProps, BlockchainState> {
+export class BlockchainRoute extends React.Component<BlockchainRouteProps, BlockchainRouteState> {
 
-    public constructor(props: BlockchainProps) {
+    public constructor(props: BlockchainRouteProps) {
         super(props);
         this.state = {};
     }
@@ -20,7 +20,7 @@ export class Blockchain extends React.Component<BlockchainProps, BlockchainState
         return (
             <div>
                 <Header {...this.props} />
-                Blockchain.tsx
+                BlockchainRoute.tsx
             </div>
         );
     }

@@ -23,7 +23,6 @@ export class NonceFinder {
     public findNonce(startingNonce=0): Promise<number> {
         return new Promise(async (resolve, reject) => {
             setTimeout(() => {
-                console.log('finding with offset ' + startingNonce + '...');
                 this._shouldStop = false;
                 let nonce = startingNonce;
 

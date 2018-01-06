@@ -4,7 +4,7 @@ import * as assert from 'assert';
 describe('NonceFinder', () => {
     it('#findNonce finds the correct nonce value', async () => {
         const nonceFinder = new NonceFinder(1, 1, 'test', 'prev-hash');
-        const nonce = nonceFinder.findNonce();
+        const nonce = await nonceFinder.findNonce();
         assert.equal(nonce, 6);
     });
 

@@ -1,19 +1,18 @@
-import { SyntheticEvent } from 'react';
-
-require('./Block.css');
+require('./BlockRoute.css');
 
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
+import { SyntheticEvent } from 'react';
 
 import { BlockModel } from '../../models/BlockModel';
 import { Header } from '../../components/header/Header';
 import { MiningLoader } from '../../components/mining_loader/MiningLoader';
 
-export interface BlockProps extends RouteComponentProps<any> {
+export interface BlockRouteProps extends RouteComponentProps<any> {
     model?: BlockModel
 }
 
-interface BlockState {
+interface BlockRouteState {
     blockStatus: string,
     isMining:    boolean,
     sequenceId:  number,
@@ -22,14 +21,14 @@ interface BlockState {
     hashValue:   string
 }
 
-export class Block extends React.Component<BlockProps, BlockState> {
+export class BlockRoute extends React.Component<BlockRouteProps, BlockRouteState> {
     public static readonly STATUS_VALID   = 'VALID';
     public static readonly STATUS_INVALID = 'INVALID';
 
-    public constructor(props: BlockProps) {
+    public constructor(props: BlockRouteProps) {
         super(props);
         this.state = {
-            blockStatus: Block.STATUS_INVALID,
+            blockStatus: BlockRoute.STATUS_INVALID,
             isMining:    false,
             nonce:       this.props.model.getNonce(),
             sequenceId:  this.props.model.getSequenceId(),
@@ -104,18 +103,20 @@ export class Block extends React.Component<BlockProps, BlockState> {
     private handleTextareaChange = async (event: SyntheticEvent<EventTarget>) => {
         const data = event.target['value'];
         this.props.model.setData(data);
-        const hash = await this.props.model.getHashValue();
-        const hashIsValid = await this.props.model.hashIsValid();
-        const status = hashIsValid ? Block.STATUS_VALID : Block.STATUS_INVALID;
+        const [hash, status] = await Promise.all([ this.props.model.getHashValue(), this.getStatus() ]);
         this.setState({data: data, hashValue: hash, blockStatus: status});
     };
 
     private handleMineClick = async () => {
         this.setState({isMining: true});
         const nonce = await this.props.model.findNonce();
-        const hash = await this.props.model.getHashValue();
-        const hashIsValid = await this.props.model.hashIsValid();
-        const status = hashIsValid ? Block.STATUS_VALID : Block.STATUS_INVALID;
+        const [hash, status] = await Promise.all([ this.props.model.getHashValue(), this.getStatus() ]);
         this.setState({nonce: nonce, hashValue: hash, blockStatus: status, isMining: false});
     };
+
+    private async getStatus(): Promise<string> {
+        const hashIsValid = await this.props.model.hashIsValid();
+        const status = hashIsValid ? BlockRoute.STATUS_VALID : BlockRoute.STATUS_INVALID;
+        return status;
+    }
 }

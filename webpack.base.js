@@ -27,7 +27,6 @@ module.exports = {
                 }
             },
             { enforce: 'pre', test: /\.js$/, use: 'source-map-loader' },
-            { enforce: 'pre', test: /\.ts?$/, use: "source-map-loader" },
             { test: /\.ts?$/,
                 use: [
                     { loader: 'awesome-typescript-loader', options: { configFileName: 'tsconfig.json' } }

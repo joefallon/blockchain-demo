@@ -3,10 +3,10 @@ import { mount } from 'enzyme';
 import * as React from 'react';
 import { MemoryRouter, Route } from 'react-router';
 
-import { Hash, HashProps } from './Hash';
+import { HashRoute, HashRouteProps } from './HashRoute';
 import { HashModel } from '../../models/HashModel';
 
-describe('Hash', () => {
+describe('HashRoute', () => {
     afterEach(async () => {
         document.title = '';
     });
@@ -21,8 +21,8 @@ describe('Hash', () => {
         assert.equal(document.title, 'Hash | Blockchain Demo');
     });
 
-    function renderHash(props: HashProps) {
+    function renderHash(props: HashRouteProps) {
         props.model = new HashModel();
-        return (<Hash {...props}/>);
+        return (<HashRoute {...props}/>);
     }
 });

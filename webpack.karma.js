@@ -20,26 +20,23 @@ module.exports = {
 
     module: {
         rules: [
-            // {
-            //     test: /\.worker\.js$/,
-            //     use: {
-            //         loader: 'worker-loader',
-            //         options: { inline: true, fallback: true }
-            //     }
-            // },
-            // { test: /\.ts?$/, loader: 'awesome-typescript-loader' },
-            { test: /\.tsx?$/, loader: 'awesome-typescript-loader' },
-            { enforce: 'pre', test: /\.tsx$/, loader: 'source-map-loader' },
-            // { enforce: 'pre', test: /\.ts$/, loader: 'source-map-loader' },
-            { enforce: 'pre', test: /\.js$/, loader: 'source-map-loader' },
+            {
+                test: /\.worker\.js$/,
+                use: {
+                    loader: 'worker-loader',
+                    options: { inline: true, fallback: true }
+                }
+            },
+            { enforce: 'pre', test: /\.js$/, use: 'source-map-loader' },
+            { test: /\.ts?$/,
+                use: [
+                    { loader: 'awesome-typescript-loader', options: { configFileName: 'tsconfig.json' } }
+                ],
+                exclude: /(?:node_modules)/
+            },
             {
                 test: /\.css$/,
                 loader: ExtractTextPlugin.extract({ fallback: 'style-loader', use: 'css-loader' })
-            },
-            {
-                test: /\.(jpe?g|png|gif|svg)$/,
-                loader: 'file-loader',
-                options: { name: '[path][name].[chunkhash:8].[ext]' }
             },
             {
                 test: /\.(ttf|eot|woff|woff2)$/,
