@@ -4,6 +4,7 @@
 .card {
     background-color: $white;
     padding: 16px;
+    margin-bottom: 24px;
     box-shadow: $shadow1;
 }
 
@@ -22,5 +23,5 @@
 }
 
 .card-actions {
-
+    margin-top: 24px;
 }
