@@ -134,5 +134,3 @@ export class BlockchainRoute extends React.Component<BlockchainRouteProps, Block
     };
 }
 
-//0000265d0b531ef4eac013f4a3a4d0b6f6d579ca6714f3c5e5e31b6dab03562b
-//0000000000000000000000000000000000000000000000000000000000000000
