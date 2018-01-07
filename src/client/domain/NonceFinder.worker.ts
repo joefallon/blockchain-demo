@@ -14,7 +14,7 @@ worker.onmessage = async (ev: MessageEvent) => {
 
     console.log('in worker' + msg['workerId'] + '...');
 
-    nonceFinder = new NonceFinder(msg['difficulty'], msg['sequenceId'], msg['data']);
+    nonceFinder = new NonceFinder(msg['difficulty'], msg['sequenceId'], msg['data'], msg['prevHash']);
     const nonce = await nonceFinder.findNonce(msg['offset']);
 
     console.log('nonce found in worker' + msg['workerId'] + '...');

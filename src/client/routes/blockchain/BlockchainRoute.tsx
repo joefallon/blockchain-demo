@@ -1,96 +1,53 @@
+import { NonceFinder } from '../../domain/NonceFinder';
+
 require('./BlockchainRoute.css');
 
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
 
 import { Header } from '../../components/header/Header';
+import { Block, BlockProps } from '../../components/block/Block';
 
 export interface BlockchainRouteProps extends RouteComponentProps<any> {}
 
-interface BlockchainRouteState {}
+interface BlockchainRouteState {
+    blocks: BlockProps[]
+}
 
 export class BlockchainRoute extends React.Component<BlockchainRouteProps, BlockchainRouteState> {
 
     public constructor(props: BlockchainRouteProps) {
         super(props);
-        this.state = {};
+        this.state = {
+            blocks: []
+        };
+        document.title = 'Blockchain | Blockchain Demo';
     }
 
     public render() {
+        const blocks = this.state.blocks.map((block: BlockProps) => {
+            return (
+                <div className='row' key={block.sequenceId}>
+                    <div className='col-md-8 col-md-offset-2'>
+                        <Block {...block}/>
+                    </div>
+                </div>
+            );
+        });
+
         return (
             <div>
                 <Header {...this.props} />
 
                 <div className='container blockchain-route'>
-                    <div className='row'>
-                        <div className='col-md-8 col-md-offset-2'>
-                            <div className='card'>
-                                <div className='card-header'>
-                                    <h3>Block 1</h3>
-                                </div>
-                                <div className='card-main'>
-                                    <div className='form-group'>
-                                        <label>Sequence ID</label>
-                                        <input type='text' className='form-control sequence-id' disabled/>
-                                    </div>
-                                    <div className='form-group'>
-                                        <label>Nonce</label>
-                                        <input type='text' className='form-control nonce' disabled/>
-                                    </div>
-                                    <div className='form-group'>
-                                        <label>Data</label>
-                                        <textarea className='form-control data-input'/>
-                                    </div>
-                                    <div className='form-group'>
-                                        <label>Previous Hash</label>
-                                        <input type="text" className='form-control prevhash-value' disabled/>
-                                    </div>
-                                    <div className='form-group'>
-                                        <label>Hash</label>
-                                        <input type="text" className='form-control hash-value' disabled/>
-                                    </div>
-                                </div>
-                                <div className='card-actions text-center'>
-                                    <div className='row'>
-                                        <div className='col-md-8'>
-                                            <div className='status-label'>
-                                                Status: <span className='status-value'>INVALID</span>
-                                            </div>
-                                        </div>
-                                        <div className='col-md-2'>
-                                            <input type="button" className="btn btn-primary" value="Mine"/>
-                                        </div>
-                                        <div className='col-md-2'>
-                                            Right
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className='row'>
-                        <div className='col-md-8 col-md-offset-2'>
-                            <div className='card'>
-                                <div className='card-header'>
-                                    <h3>Block 2</h3>
-                                </div>
-                                <div className='card-main'>
-                                    <div className='form-group'>
-
-                                    </div>
-                                </div>
-                                <div className='card-actions'>
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    {blocks}
 
                     <div className='row'>
                         <div className='col-md-8 col-md-offset-2 text-right'>
                             <div className='add-block'>
-                                <input type="button" className="btn btn-primary" value="Add Block"/>
+                                <input type="button" className="btn btn-primary" value="Add Block"
+                                       name="add-block-button"
+                                       onClick={this.handleAddBlockClick}/>
                             </div>
                         </div>
                     </div>
@@ -99,4 +56,83 @@ export class BlockchainRoute extends React.Component<BlockchainRouteProps, Block
             </div>
         );
     }
+
+    public handleAddBlockClick = () => {
+        this.setState((prevState: BlockchainRouteState) => {
+            const sequenceId = prevState.blocks.length + 1;
+            let prevHash = '0000000000000000000000000000000000000000000000000000000000000000';
+
+            if(prevState.blocks.length > 0) {
+                const lastIndex = prevState.blocks.length - 1;
+                const lastBlock = prevState.blocks[lastIndex];
+                prevHash = lastBlock.hash;
+            }
+
+            const nonceFinder = new NonceFinder(Block.DIFFICULTY, sequenceId, '', prevHash);
+            const hash = nonceFinder.hash(0);
+
+            const block: BlockProps = {
+                sequenceId: sequenceId,
+                data: '',
+                hash: hash,
+                nonce: 0,
+                prevHash: prevHash,
+                onDataInputChange: this.handleDataInputChange,
+                onNonceUpdate:     this.handleNonceUpdate
+            };
+
+            prevState.blocks.push(block);
+            return prevState;
+        });
+    };
+
+    public handleDataInputChange = (sequenceId: number, newData: string, newHash: string) => {
+        this.setState((previousState: BlockchainRouteState) => {
+            let found = false;
+            let currSeq = sequenceId;
+            let prevHash = '';
+
+            previousState.blocks.map((block: BlockProps) => {
+                if(block.sequenceId == sequenceId && !found) {
+                    block.data = newData;
+                    block.hash = newHash;
+                    found = true;
+                    currSeq += 1;
+                    prevHash = newHash;
+                }
+
+                if(found && block.sequenceId == currSeq) {
+                    block.prevHash = prevHash;
+                    const nonceFinder = new NonceFinder(Block.DIFFICULTY, block.sequenceId,
+                        block.data, block.prevHash);
+                    block.hash = nonceFinder.hash(block.nonce);
+                    prevHash = block.hash;
+                    currSeq += 1;
+                }
+            });
+            return previousState;
+        });
+    };
+
+    public handleNonceUpdate = (sequenceId: number, newNonce: number, newHash: string) => {
+        this.setState((previousState: BlockchainRouteState) => {
+            previousState.blocks.map((block: BlockProps) => {
+                if(block.sequenceId == sequenceId) {
+                    block.nonce = newNonce;
+                    block.hash = newHash;
+                }
+
+                if(block.sequenceId == sequenceId + 1) {
+                    block.prevHash = newHash;
+                    const nonceFinder = new NonceFinder(Block.DIFFICULTY, block.sequenceId,
+                        block.data, block.prevHash);
+                    block.hash = nonceFinder.hash(block.nonce);
+                }
+            });
+            return previousState;
+        });
+    };
 }
+
+//0000265d0b531ef4eac013f4a3a4d0b6f6d579ca6714f3c5e5e31b6dab03562b
+//0000000000000000000000000000000000000000000000000000000000000000

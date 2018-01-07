@@ -36,6 +36,7 @@ export class BlockRoute extends React.Component<BlockRouteProps, BlockRouteState
             hashValue:   ''
         };
         this.props.model.setData('');
+        document.title = 'Block | Blockchain Demo';
     }
 
     public async componentWillMount() {
@@ -57,22 +58,26 @@ export class BlockRoute extends React.Component<BlockRouteProps, BlockRouteState
                                 <div className='form-group'>
                                     <label>Sequence ID</label>
                                     <input type="text" className='form-control sequence-id'
+                                           name="sequence-id"
                                            value={this.state.sequenceId} disabled/>
                                 </div>
                                 <div className='form-group'>
                                     <label>Nonce</label>
                                     <input type="text" className='form-control nonce'
+                                           name="nonce"
                                            value={this.state.nonce} disabled/>
                                 </div>
                                 <div className='form-group'>
                                     <label>Data</label>
                                     <textarea className='form-control data-input'
+                                              name="data-input"
                                               value={this.state.data}
-                                    onChange={this.handleTextareaChange}/>
+                                              onChange={this.handleTextareaChange}/>
                                 </div>
                                 <div className='form-group'>
                                     <label>Hash</label>
                                     <input type="text" className='form-control hash-value'
+                                           name="hash-value"
                                            value={this.state.hashValue} disabled/>
                                 </div>
                             </div>

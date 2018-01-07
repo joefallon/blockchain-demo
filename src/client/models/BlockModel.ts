@@ -63,7 +63,8 @@ export class BlockModel {
                 data:       this._data,
                 difficulty: BlockModel.DIFFICULTY,
                 offset:     0,
-                workerId:   1
+                workerId:   1,
+                prevHash:   ''
             };
 
             console.log('sending msg to worker1...');
