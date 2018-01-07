@@ -10,8 +10,8 @@ export interface BlockProps {
     data:       string,
     prevHash:   string,
     hash:       string,
-    onDataInputChange: (sequenceId: number, newData: string, newHash: string) => void,
-    onNonceUpdate:     (sequenceId: number, newNonce: number, newHash: string) => void
+    onDataInputChange: (sequenceId: number, newData: string) => void,
+    onNonceUpdate:     (sequenceId: number, newNonce: number) => void
 }
 
 interface BlockState{
@@ -98,22 +98,10 @@ export class Block extends React.Component<BlockProps, BlockState> {
 
     private handleDataChange = (ev: SyntheticEvent<EventTarget>) => {
         const sequenceId = this.props.sequenceId;
-        const data       = ev.target['value'];
-        const prevHash   = this.props.prevHash;
-        const nonce      = this.props.nonce;
-
-        const nonceFinder = new NonceFinder(Block.DIFFICULTY, sequenceId, data, prevHash);
-        const newHash     = nonceFinder.hash(nonce);
-        // const status = this.getStatus();
-        // this.setState({status: status });
-        this.props.onDataInputChange(sequenceId, ev.target['value'], newHash);
+        this.props.onDataInputChange(sequenceId, ev.target['value']);
     };
 
     private handleMineButtonClick = () => {
-        // find new nonce
-        // calculate new hash
-        // inform parent of new nonce and new hash
-
         const worker = this._worker;
 
         const msg = {
@@ -125,17 +113,11 @@ export class Block extends React.Component<BlockProps, BlockState> {
             prevHash:   this.props.prevHash
         };
 
-        const nonceFinder = new NonceFinder(Block.DIFFICULTY, this.props.sequenceId,
-                                            this.props.data, this.props.prevHash);
-
         worker.onmessage = (message: MessageEvent) => {
             console.log('message received from worker1...');
             console.log(message);
             const nonce = JSON.parse(message.data);
-            const hash =  nonceFinder.hash(nonce);
-            // const status = this.getStatus();
-            // this.setState({status: status });
-            this.props.onNonceUpdate(this.props.sequenceId, nonce, hash);
+            this.props.onNonceUpdate(this.props.sequenceId, nonce);
         };
 
         console.log('sending msg to worker1...');

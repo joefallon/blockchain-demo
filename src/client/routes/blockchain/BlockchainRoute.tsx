@@ -86,51 +86,53 @@ export class BlockchainRoute extends React.Component<BlockchainRouteProps, Block
         });
     };
 
-    public handleDataInputChange = (sequenceId: number, newData: string, newHash: string) => {
+    public handleDataInputChange = (sequenceId: number, newData: string) => {
         this.setState((previousState: BlockchainRouteState) => {
-            let found = false;
-            let currSeq = sequenceId;
-            let prevHash = '';
-
             previousState.blocks.map((block: BlockProps) => {
-                if(block.sequenceId == sequenceId && !found) {
+                if(block.sequenceId == sequenceId) {
                     block.data = newData;
-                    block.hash = newHash;
-                    found = true;
-                    currSeq += 1;
-                    prevHash = newHash;
-                }
-
-                if(found && block.sequenceId == currSeq) {
-                    block.prevHash = prevHash;
-                    const nonceFinder = new NonceFinder(Block.DIFFICULTY, block.sequenceId,
-                        block.data, block.prevHash);
-                    block.hash = nonceFinder.hash(block.nonce);
-                    prevHash = block.hash;
-                    currSeq += 1;
                 }
             });
+
+            previousState = this.updateChain(previousState);
+
             return previousState;
         });
     };
 
-    public handleNonceUpdate = (sequenceId: number, newNonce: number, newHash: string) => {
+    public handleNonceUpdate = (sequenceId: number, newNonce: number) => {
         this.setState((previousState: BlockchainRouteState) => {
             previousState.blocks.map((block: BlockProps) => {
                 if(block.sequenceId == sequenceId) {
                     block.nonce = newNonce;
-                    block.hash = newHash;
-                }
-
-                if(block.sequenceId == sequenceId + 1) {
-                    block.prevHash = newHash;
-                    const nonceFinder = new NonceFinder(Block.DIFFICULTY, block.sequenceId,
-                        block.data, block.prevHash);
-                    block.hash = nonceFinder.hash(block.nonce);
                 }
             });
+
+            previousState = this.updateChain(previousState);
+
             return previousState;
         });
+    };
+
+    private updateChain = (state: BlockchainRouteState): BlockchainRouteState => {
+        const blocks = state.blocks;
+        if(blocks.length == 0) { return state; }
+
+        let prevHash = '0000000000000000000000000000000000000000000000000000000000000000';
+        let currHash = '';
+
+        for(let i = 0; i < blocks.length; i++) {
+            const seqId = blocks[i].sequenceId;
+            const data  = blocks[i].data;
+            const nonce = blocks[i].nonce;
+            const nonceFinder = new NonceFinder(Block.DIFFICULTY, seqId, data, prevHash);
+            currHash = nonceFinder.hash(nonce);
+            blocks[i].prevHash = prevHash;
+            blocks[i].hash = currHash;
+            prevHash = currHash;
+        }
+
+        return state;
     };
 }
 
