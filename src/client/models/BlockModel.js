@@ -73,7 +73,7 @@ var BlockModel = /** @class */ (function () {
         var nonceFinder = new NonceFinder_1.NonceFinder(BlockModel.DIFFICULTY, sequenceId, data);
         return nonceFinder.isHashMatch(nonce);
     };
-    BlockModel.DIFFICULTY = 3;
+    BlockModel.DIFFICULTY = 4;
     return BlockModel;
 }());
 exports.BlockModel = BlockModel;

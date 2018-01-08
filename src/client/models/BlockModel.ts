@@ -6,7 +6,7 @@ import NonceFinderWorker = require('worker-loader!../domain/NonceFinder.worker.t
 import { NonceFinder } from '../domain/NonceFinder';
 
 export class BlockModel {
-    private static readonly DIFFICULTY = 3;
+    private static readonly DIFFICULTY = 4;
 
     private _sequenceId: number;
     private _nonce: number;

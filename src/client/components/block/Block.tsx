@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { SyntheticEvent } from 'react';
-import { NonceFinder } from '../../domain/NonceFinder';
 
+import { MiningLoader } from '../mining_loader/MiningLoader';
+import { NonceFinder } from '../../domain/NonceFinder';
 import NonceFinderWorker = require('worker-loader!../../domain/NonceFinder.worker.ts');
 
 export interface BlockProps {
@@ -15,6 +16,7 @@ export interface BlockProps {
 }
 
 interface BlockState{
+    isMining: boolean
 }
 
 export class Block extends React.Component<BlockProps, BlockState> {
@@ -25,7 +27,7 @@ export class Block extends React.Component<BlockProps, BlockState> {
     public constructor(props: BlockProps) {
         super(props);
         this.state = {
-
+            isMining: false
         };
         this._worker = new NonceFinderWorker();
     }
@@ -86,7 +88,7 @@ export class Block extends React.Component<BlockProps, BlockState> {
                                    onClick={this.handleMineButtonClick}/>
                         </div>
                         <div className='col-md-2'>
-                            Right
+                            {this.renderMiningLoader()}
                         </div>
                     </div>
                 </div>
@@ -102,6 +104,7 @@ export class Block extends React.Component<BlockProps, BlockState> {
     };
 
     private handleMineButtonClick = () => {
+        this.setState({isMining: true});
         const worker = this._worker;
 
         const msg = {
@@ -114,6 +117,7 @@ export class Block extends React.Component<BlockProps, BlockState> {
         };
 
         worker.onmessage = (message: MessageEvent) => {
+            this.setState({isMining: false});
             console.log('message received from worker1...');
             console.log(message);
             const nonce = JSON.parse(message.data);
@@ -123,5 +127,14 @@ export class Block extends React.Component<BlockProps, BlockState> {
         console.log('sending msg to worker1...');
         console.log(msg);
         worker.postMessage(JSON.stringify(msg));
+    };
+
+    private renderMiningLoader = () => {
+        if(this.state.isMining) {
+            return (<MiningLoader/>);
+        }
+        else {
+            return null;
+        }
     };
 }
