@@ -34,10 +34,6 @@ module.exports = {
                 exclude: /(?:node_modules)/
             },
             {
-                test: /\.css$/,
-                loader: ExtractTextPlugin.extract({ fallback: 'style-loader', use: 'css-loader' })
-            },
-            {
                 test: /\.(ttf|eot|woff|woff2)$/,
                 loader: 'file-loader',
                 options: { name: 'fonts/[name].[ext]' }

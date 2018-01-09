@@ -1,7 +1,8 @@
 'use strict';
-const common  = require('./webpack.base.js');
-const merge   = require('webpack-merge');
-const path    = require('path');
+const common            = require('./webpack.base.js');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const merge             = require('webpack-merge');
+const path              = require('path');
 
 module.exports = merge(common, {
     output: {
@@ -29,6 +30,15 @@ module.exports = merge(common, {
         poll: false,
         ignored: [ /node_modules/,  "src/**/*.tsx", "src/**/*.ts", "src/**/*.test.*",
                    "src/**/*Test*", "src/**/*.scss" ]
+    },
+
+    module: {
+        rules: [
+            {
+                test: /\.css$/,
+                use: ExtractTextPlugin.extract({ fallback: 'style-loader', use: [{ loader: 'css-loader' }]})
+            }
+        ]
     },
 
     plugins: [
